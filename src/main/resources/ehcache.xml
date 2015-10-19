@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <defaultCache
+        maxElementsInMemory="10000" 
+        eternal="true"
+        timeToIdleSeconds="120" 
+        timeToLiveSeconds="120" 
+        overflowToDisk="true"
+        maxElementsOnDisk="10000000" 
+        diskPersistent="true"
+        diskExpiryThreadIntervalSeconds="120" 
+        memoryStoreEvictionPolicy="LRU" />
+    <!-- location to store cache file -->
+    <diskStore path="java.io.tmpdir/EhCacheEMS" />
+    <!--  cache configuration for  prefix -->
+    <cache 
+        name="prefix" 
+        maxElementsInMemory="500" 
+        eternal="true"
+        overflowToDisk="true" 
+        timeToIdleSeconds="300" 
+        timeToLiveSeconds="600"
+        diskPersistent="true" 
+        diskExpiryThreadIntervalSeconds="1"
+        memoryStoreEvictionPolicy="LFU" />
+    <!--  cache configuration for  suffix -->
+    <cache 
+        name="suffix" 
+        maxElementsInMemory="500" 
+        eternal="true"
+        overflowToDisk="true" 
+        timeToIdleSeconds="300" 
+        timeToLiveSeconds="600"
+        diskPersistent="true" 
+        diskExpiryThreadIntervalSeconds="1"
+        memoryStoreEvictionPolicy="LFU" />
+    <!--  cache configuration for  state -->
+    <cache 
+        name="state" 
+        maxElementsInMemory="500" 
+        eternal="true"
+        overflowToDisk="true" 
+        timeToIdleSeconds="300" 
+        timeToLiveSeconds="600"
+        diskPersistent="true" 
+        diskExpiryThreadIntervalSeconds="1"
+        memoryStoreEvictionPolicy="LFU" />
+</ehcache>

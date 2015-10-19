@@ -1,0 +1,23 @@
+!Configuration # Mandetory
+ 
+# Configure handlers, One or more handlers must be configured.
+handlers:
+- !org.audit4j.core.handler.ConsoleAuditHandler {}
+- !org.audit4j.core.handler.file.FileAuditHandler {}
+- !org.audit4j.handler.db.DatabaseAuditHandler{}
+embeded: false
+db_connection_type: pooled
+db_driver: com.mysql.jdbc.Driver
+db_url: jdbc:mysql://127.0.01:3306/sample_cxf
+db_user: root
+db_password: root
+ 
+# Configure handlers, Either one handler must be configured.
+layout: !org.audit4j.core.layout.SimpleLayout {}
+ 
+# Configure meta data.
+metaData: !org.akc.audit4j.MyMetaData {}
+ 
+# Configure additional properties.
+properties:
+   log.file.location: D:\sampleAKCLogs\logs\audit\audit.log

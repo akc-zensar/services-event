@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-3.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<!-- Scan for spring annotated components -->
+	<!-- <context:component-scan base-package="org.akc.user"/> -->
+	<context:component-scan base-package="org.akc" />
+
+	<!-- Process annotations on registered beans like @Autowired... -->
+	<context:annotation-config />
+
+	<bean id="userAccountQuery" class="org.akc.dao.impl.queries.UserAccountQuery">
+		<!-- <constructor-arg ref="mainDataSource"/> -->
+		<constructor-arg ref="dbDataSource" />
+		<constructor-arg
+			value="SELECT * FROM useraccount  WHERE TEXT_LOGIN_CUSTOMER = ? " />
+
+		<constructor-arg>
+			<list>
+				<!-- login name AND TEXT_PASSWORD_ENCRYPTED = ? -->
+				<bean class="org.springframework.jdbc.core.SqlParameter">
+					<constructor-arg>
+
+						<util:constant static-field="java.sql.Types.CHAR" />
+					</constructor-arg>
+				</bean>
+				<!-- login Pass -->
+				<!-- <bean class="org.springframework.jdbc.core.SqlParameter"> -->
+				<!-- <constructor-arg> -->
+				<!-- <util:constant static-field="java.sql.Types.CHAR"/> -->
+				<!-- </constructor-arg> -->
+				<!-- </bean> -->
+
+			</list>
+		</constructor-arg>
+
+	</bean>
+
+	<bean id="akcEventDao" class="org.akc.dao.impl.AuthDAOJdbcImpl">
+		<!-- <constructor-arg ref="mainDataSource"/> -->
+		<constructor-arg ref="dbDataSource" />
+		<property name="userAccountQuery" ref="userAccountQuery" />
+	</bean>
+
+	<bean id="ocmsEventControllerFactory" scope="singleton"
+		class="org.akc.controller.OcmsEventControllerFactory">
+	</bean>
+
+	<bean id="ocmsEventController" scope="prototype"
+		class="org.akc.controller.OcmsEventController">
+		<property name="akcEventDao" ref="akcEventDao" />
+	</bean>
+
+	<bean id="pserv" class="org.akc.dao.model.PasswordService"
+		autowire="default" />
+	<bean id="successFailur" class="org.akc.dao.model.GenericResponse"
+		autowire="default" />
+
+	<bean id="genericStatusBean" class="org.akc.util.GenericStatus">
+		<property name="eventStatusMap">
+			<map>
+				<entry key="1" value="Deny" />
+				<entry key="2" value="Initialized" />
+				<entry key="3" value="Pending for Edits" />
+				<entry key="4" value="Cancelled Event" />
+				<entry key="5" value="Approved with Override" />
+				<entry key="6" value="Approved" />
+				<entry key="7" value="Approved pre database" />
+				</map>
+		  </property>
+		  	<property name="judgePanelStatusMap">
+			<map>
+				<entry key="1" value="Approved" />
+				<entry key="2" value="Initialized" />
+				<entry key="3" value="Pended" />
+				<entry key="4" value="NOEV" />
+			</map>
+		  </property>
+		 <property name="timeZonesMap">
+		<map>
+    	  <entry key="ATST" value="Atlantic Standard Time"/>
+		  <entry key="ATDT" value="Atlantic Daylight Time"/>
+		  <entry key="EST" value="Eastern Standard Time"/>
+		  <entry key="EDT" value="Eastern Daylight Time"/>
+		  <entry key="CST" value="Central Standard Time"/>
+		  <entry key="CDT" value="Central Daylight Time"/>
+		  <entry key="MST" value="Mountain Standard Time"/>
+		  <entry key="MDT" value="Mountain Daylight Time"/>
+		  <entry key="PST" value="Pacific Standard Time"/>
+		  <entry key="PDT" value="Pacific Daylight Time"/>
+		  <entry key="ALST" value="Alaskan Standard Time"/>
+		  <entry key="ALDT" value="Alaskan Daylight Time"/>
+		  <entry key="HST" value="Hawaiian Standard Time"/>
+		  <entry key="HDT" value="Hawaiian Daylight Time"/>
+		</map>
+      </property>
+      <property name="eventSettingMap">
+	<map>
+    	  <entry key="I" value="inside"/>
+		  <entry key="O" value="outside"/>
+		  <entry key="BIO" value="both inside outside"/>
+		  <entry key="OC" value="outside covered"/>
+    </map>
+</property>
+
+
+	</bean>
+
+</beans>

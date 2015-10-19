@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     	xmlns:cxf="http://cxf.apache.org/core"
+		xmlns:jaxws="http://cxf.apache.org/jaxws"
+		xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+		xsi:schemaLocation="
+			http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+			http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<!-- these are included in the dependency jar -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+		
+	<jaxrs:server id="getCompetitionService" address="/event/competition">
+		<jaxrs:serviceBeans>
+			<ref bean="competitionService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			<bean class="org.akc.exception.ExceptionHandler" />
+		</jaxrs:providers>
+		<jaxrs:extensionMappings>
+			 <entry key="xml" value="application/xml" /> 
+			<entry key="json" value="application/json" />
+
+		</jaxrs:extensionMappings>
+	</jaxrs:server>
+	
+	<!-- competetionType by event id 	EventCompetitionService -->
+	
+	
+     <jaxrs:server id="eventService1" address="/event">
+        <jaxrs:serviceBeans>
+            <ref bean="eventService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+            <bean class="org.akc.exception.ExceptionHandler"/>
+        </jaxrs:providers>
+        <jaxrs:extensionMappings>
+        	<!-- <entry key="xml" value="application/xml" /> -->
+        	<entry key="json" value="application/json" />
+        
+        </jaxrs:extensionMappings>
+    </jaxrs:server>
+<!--      <jaxrs:server id="getAllEventService" address="/event">
+        <jaxrs:serviceBeans>
+            <ref bean="eventService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+            <bean class="org.akc.exception.ExceptionHandler"/>
+        </jaxrs:providers>
+        <jaxrs:extensionMappings>
+        	<entry key="xml" value="application/xml" />
+        	<entry key="json" value="application/json" />
+        
+        </jaxrs:extensionMappings>
+    </jaxrs:server> -->
+    
+    <!-- chairperson -->
+<jaxrs:server id="ChairPersonService" address="/event/chairPerson">
+		<jaxrs:serviceBeans>
+			<ref bean="chairPersonService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			<bean class="org.akc.exception.ExceptionHandler" />
+		</jaxrs:providers>
+		<jaxrs:extensionMappings>
+			<entry key="xml" value="application/xml" />
+			<entry key="json" value="application/json" />
+
+		</jaxrs:extensionMappings>
+	</jaxrs:server>
+
+ <!-- Committee -->
+  <jaxrs:server id="CommitteeService" address="/event/committee">
+		<jaxrs:serviceBeans>
+			<ref bean="committeeService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			<bean class="org.akc.exception.ExceptionHandler" />
+		</jaxrs:providers>
+		<jaxrs:extensionMappings>
+			<entry key="xml" value="application/xml" />
+			<entry key="json" value="application/json" />
+
+		</jaxrs:extensionMappings>
+	</jaxrs:server>
+   
+   
+   <!-- secretary -->
+  <jaxrs:server id="SecretaryService" address="/event/secretary">
+  <jaxrs:serviceBeans>
+   <ref bean="secretaryService" />
+  </jaxrs:serviceBeans>
+  <jaxrs:providers>
+   <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+   <bean class="org.akc.exception.ExceptionHandler" />
+  </jaxrs:providers>
+  <jaxrs:extensionMappings>
+   <entry key="xml" value="application/xml" />
+   <entry key="json" value="application/json" />
+
+  </jaxrs:extensionMappings>
+ </jaxrs:server>  
+
+    <!-- superintendentService -->
+<!-- <jaxrs:server id="SuperintendentService" address="/event/superintendent">
+		<jaxrs:serviceBeans>
+			<ref bean="superintendentService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			<bean class="org.akc.exception.ExceptionHandler" />
+		</jaxrs:providers>
+		<jaxrs:extensionMappings>
+			<entry key="xml" value="application/xml" />
+			<entry key="json" value="application/json" />
+
+		</jaxrs:extensionMappings>
+	</jaxrs:server> -->
+
+    <!-- specialEventTypeService -->
+<!-- <jaxrs:server id="SpecialEventTypeService" address="/event/specialeventtype">
+		<jaxrs:serviceBeans>
+			<ref bean="specialEventTypeService" />
+		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+			<bean class="org.akc.exception.ExceptionHandler" />
+		</jaxrs:providers>
+		<jaxrs:extensionMappings>
+			<entry key="xml" value="application/xml" />
+			<entry key="json" value="application/json" />
+
+		</jaxrs:extensionMappings>
+	</jaxrs:server> -->
+	
+	    <!-- prefix Service -->
+	    
+	<jaxrs:server id="UtilService" address="/master">
+			<jaxrs:serviceBeans>
+				<ref bean="utilService" />
+			</jaxrs:serviceBeans>
+			<jaxrs:providers>
+				<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+				<bean class="org.akc.exception.ExceptionHandler" />
+			</jaxrs:providers>
+			<jaxrs:extensionMappings>
+				<entry key="json" value="application/json" />
+	
+			</jaxrs:extensionMappings>
+		</jaxrs:server>
+		
+	
+	<jaxrs:server id="restfulId" address="/auth">
+		<jaxrs:serviceBeans>
+			<ref bean="authService" />
+		</jaxrs:serviceBeans>
+
+		<!-- jax jackson -->
+		<jaxrs:providers>
+			<bean id="jacksonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"></bean>
+		</jaxrs:providers>
+	</jaxrs:server>	
+</beans>
