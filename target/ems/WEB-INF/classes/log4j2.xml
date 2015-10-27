@@ -1,22 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+<Configuration status="debug" monitorInterval="30"
+	packages="">
+	<!-- http://logging.apache.org/log4j/2.x/manual/configuration.html -->
+	<Properties>
+		<Property name="debuglocation">D:/logs/debuglog.log</Property>
+		<Property name="errorlocation">D:/logs/errorlog.log</Property>
+		<Property name="infolocation">D:/logs/infolog.log</Property>
+	</Properties>
 
-    <Appenders>
-        <File name="FILE" fileName="emslog.log" append="true">
-            <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n"/>
-        </File>
-        <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n"/>
-        </Console>
-    </Appenders>
 
-    <Loggers>
-        <Logger name="org.akc.service.impl" level="debug"/>
 
-        <Root level="info">
-            <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="FILE"/>
-        </Root>
-    </Loggers>
+	<Appenders>
+		 
+    
+   <Failover name="Failover" primary="infolog">
+      <Failovers>
+        <AppenderRef ref="infolog"/>
+      </Failovers>
+    </Failover>
+		<!-- <File name="errorlog" fileName="c:/errorlog.log" immediateFlush="true" 
+			class="org.apache.log4j.rolling.RollingFileAppender"> <PatternLayout pattern="%d{yyy-MM-dd 
+			HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/> </File> <File name="debuglog" 
+			fileName="c:/debuglog.log" immediateFlush="true"> <PatternLayout pattern="%d{yyy-MM-dd 
+			HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/> </File> <File name="infolog" 
+			fileName="c:/infolog.log" immediateFlush="true"> <PatternLayout pattern="%d{yyy-MM-dd 
+			HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/> </File> -->
+
+
+		<RollingFile name="errorlog" fileName="${errorlocation}"
+			filePattern="c:/errorLog-%d{MM-dd-yyyy}-%i.log">
+			<PatternLayout>
+				<Pattern>%d %p %c [%t] %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="1 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="2000" />
+			<Filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT" />
+				<ThresholdFilter level="fatal" onMatch="ACCEPT" />
+			</Filters>
+		</RollingFile>
+
+
+
+		<Async name="Async">
+			<AppenderRef ref="errorlog" />
+		</Async>
+
+		<RollingFile name="debuglog" fileName="${debuglocation}"
+			filePattern="c:/debuglog-%d{MM-dd-yyyy}-%i.log">
+
+			<PatternLayout>
+				<Pattern>%d %p %c [%t] %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="1 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="2000" />
+			<Filters>
+
+				<!-- Now deny warn, error and fatal messages -->
+				<ThresholdFilter level="error" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="fatal" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="info" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+
+				<!-- This filter accepts info, warn, error, fatal and denies debug/trace -->
+				<ThresholdFilter level="debug" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+		</RollingFile>
+
+
+
+		<Async name="AsyncDebug">
+			<AppenderRef ref="debuglog" />
+		</Async>
+
+
+
+		<RollingFile name="infolog" fileName="${infolocation}"
+			filePattern="c:/infolog-%d{MM-dd-yyyy}-%i.log">
+
+			<PatternLayout>
+				<Pattern>%d %p %c [%t] %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="1 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="2000" />
+			<Filters>
+				<ThresholdFilter level="info" onMatch="ACCEPT" />
+				<ThresholdFilter level="trace" onMatch="ACCEPT" />
+				<ThresholdFilter level="warn" onMatch="ACCEPT" />
+			</Filters>
+		</RollingFile>
+
+
+
+		<Async name="Asyncinfo">
+			<AppenderRef ref="infolog" />
+		</Async>
+
+	</Appenders>
+
+
+
+
+
+
+
+	<Loggers>
+
+
+		<Root level="all" additivity="false">
+			<AppenderRef ref="AsyncDebug" />
+			<AppenderRef ref="Asyncinfo" />
+			<AppenderRef ref="Async" />
+		
+			<AppenderRef ref="Failover"/>
+		</Root>
+
+	</Loggers>
+
+
+
+
+
+
 
 </Configuration>

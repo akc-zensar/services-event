@@ -7,7 +7,7 @@ import org.akc.dao.CompetitionDao;
 import org.akc.dao.model.Competition;
 import org.akc.dto.CompetitionForm;
 import org.akc.exception.EmsGenericException;
-import org.akc.transformer.DtoTransformerImpl;
+import org.akc.transformer.BeanTransformer;
 import org.akc.util.ApplicationConstants;
 import org.akc.util.EmsGenericResponse;
 import org.akc.util.Fault;
@@ -38,9 +38,13 @@ public class CompetitionAssemblerImpl implements CompetitionAssembler {
 
 	@Autowired
 	Fault fault;
-	@SuppressWarnings("rawtypes")
+	
+/*	@SuppressWarnings("rawtypes")
 	@Autowired
-	DtoTransformerImpl dtoTransformerImpl;
+	DtoTransformerImpl dtoTransformerImpl;*/
+	/*@Autowired
+	BeanTransformer dtoTransformerImpl;*/
+	BeanTransformer dtoTransformerImpl =  new BeanTransformer();
 	@Autowired
 	GenericStatus genericStatus;
 	
@@ -57,14 +61,19 @@ public class CompetitionAssemblerImpl implements CompetitionAssembler {
 	@Override
 	public EmsGenericResponse findByEventIdAndCompetitionId(Integer eventId, Integer competitionId) throws EmsGenericException {
 		LoggerHelper.debug(LOGGER, " Enter in findCompetitionByEventIdCompetitionId method of CompetitionAssemblerImpl class ");
-
 		Competition competition = competitionDao.findByEventIdAndCompetitionId(eventId, competitionId);
 		if (competition!=null){
 			LoggerHelper.debug(LOGGER, " Value of competitionReturn is : " , competition);
 			LoggerHelper.debug(LOGGER, " Exit from  findCompetitionByEventIdCompetitionId method of CompetitionAssemblerImpl class   ");
 			loadGenericStatus(competition);
     //return (CompetitionForm) dtoTransformerImpl.copyObjectDestination2Source(CompetitionForm.class, competition);
-			CompetitionForm competitionFormReturned = (CompetitionForm) dtoTransformerImpl.copyObjectDestination2Source(CompetitionForm.class, competition);
+			CompetitionForm competitionFormReturned = new CompetitionForm();;
+			try {
+				competitionFormReturned = (CompetitionForm) dtoTransformerImpl.CopyProperties(competition,new CompetitionForm());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		EmsGenericResponse<CompetitionForm> emsGenericResponse = new EmsGenericResponse<CompetitionForm>(competitionFormReturned, null);
 		return emsGenericResponse;
 		}else {
@@ -89,7 +98,13 @@ public class CompetitionAssemblerImpl implements CompetitionAssembler {
 
 	@Override
 	public EmsGenericResponse saveCompetition(CompetitionForm competitionForm) throws EmsGenericException {
-		Competition competition = (Competition) dtoTransformerImpl.copyObjectDestination2Source(Competition.class,competitionForm);
+		Competition competition = new Competition();
+		try {
+			competition = (Competition) dtoTransformerImpl.CopyProperties(competitionForm,new Competition());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		RecordInfo recordInfo = setRecordInfo();
 		recordInfo.setCreatedBy(createdorUpdatedBy);
@@ -98,7 +113,13 @@ public class CompetitionAssemblerImpl implements CompetitionAssembler {
 
 		LoggerHelper.debug(LOGGER, " Value of competitionReturn is : " , competition);
 		LoggerHelper.debug(LOGGER, " Exit from  saveorUpdateCompetition method of CompetitionAssemblerImpl class   ");
-		CompetitionForm competitionFormReturned =  (CompetitionForm) dtoTransformerImpl.copyObjectDestination2Source(CompetitionForm.class, competition);
+		CompetitionForm competitionFormReturned = new CompetitionForm();
+		try {
+			competitionFormReturned = (CompetitionForm) dtoTransformerImpl.CopyProperties(competition,new CompetitionForm());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		EmsGenericResponse<CompetitionForm> emsGenericResponse = new EmsGenericResponse<CompetitionForm>(competitionFormReturned, null);
 		return emsGenericResponse;
 	}
@@ -116,20 +137,28 @@ public class CompetitionAssemblerImpl implements CompetitionAssembler {
 		RecordInfo recordInfo = setRecordInfo();
 		Competition competitionFindOneResult = competitionDao.findOne(competitionForm.getCompetitionId());
 
-		CompetitionForm competitionFindOneResultForm = (CompetitionForm) dtoTransformerImpl.copyObjectDestination2Source(CompetitionForm.class,competitionFindOneResult);
-     	CompetitionForm competitioncopyfrom2form = (CompetitionForm) dtoTransformerImpl.myCopyProperties(competitionForm,competitionFindOneResultForm);
-		Competition competitionToUpdate = (Competition) dtoTransformerImpl.copyObjectDestination2Source(Competition.class,competitioncopyfrom2form);
-		
-		recordInfo.setCreatedBy(competitionFindOneResult.getRecordInfo().getCreatedBy());
-		competitionToUpdate.setRecordInfo(recordInfo);
-		Competition competitionUpdated = competitionDao.save(competitionToUpdate);
-		loadGenericStatus(competitionUpdated);
-		
-		LoggerHelper.debug(LOGGER, " Value of competitionReturn is : " , competitionToUpdate);
-		LoggerHelper.debug(LOGGER, " Exit from  saveorUpdateCompetition method of CompetitionAssemblerImpl class   ");
-		CompetitionForm competitionFormReturned = (CompetitionForm) dtoTransformerImpl.copyObjectDestination2Source(CompetitionForm.class,competitionUpdated);
-		EmsGenericResponse<CompetitionForm> emsGenericResponse = new EmsGenericResponse<CompetitionForm>(competitionFormReturned, null);
-		return emsGenericResponse;
+		CompetitionForm competitionFindOneResultForm;
+		try {
+			competitionFindOneResultForm = (CompetitionForm) dtoTransformerImpl.CopyProperties(competitionFindOneResult,new CompetitionForm());
+			CompetitionForm competitioncopyfrom2form = (CompetitionForm) dtoTransformerImpl.CopyProperties(competitionForm,competitionFindOneResultForm);
+			Competition competitionToUpdate = (Competition) dtoTransformerImpl.CopyProperties(competitioncopyfrom2form,new Competition());
+			recordInfo.setCreatedBy(competitionFindOneResult.getRecordInfo().getCreatedBy());
+			competitionToUpdate.setRecordInfo(recordInfo);
+			Competition competitionUpdated = competitionDao.save(competitionToUpdate);
+			loadGenericStatus(competitionUpdated);	
+			LoggerHelper.debug(LOGGER, " Value of competitionReturn is : " , competitionToUpdate);
+			LoggerHelper.debug(LOGGER, " Exit from  saveorUpdateCompetition method of CompetitionAssemblerImpl class   ");
+			CompetitionForm competitionFormReturned = (CompetitionForm) dtoTransformerImpl.CopyProperties(competitionUpdated,new CompetitionForm());
+			EmsGenericResponse<CompetitionForm> emsGenericResponse = new EmsGenericResponse<CompetitionForm>(competitionFormReturned, null);	
+			return emsGenericResponse;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}/*catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+    return null; 	
 	}
 
 	

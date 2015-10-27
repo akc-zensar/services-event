@@ -214,7 +214,79 @@
 			<artifactId>audit4j-db</artifactId>
 			<version>2.3.1</version>
 		</dependency>
-		
+ <!--   transformer  -->
+        <dependency>
+            <groupId>org.akc.transformer</groupId>
+            <artifactId>transformer</artifactId>
+            <version>1.0</version>
+        </dependency>	 	
+ <!--   Logger dependencies  -->	
+<dependency>
+	<groupId>aopalliance</groupId>
+	<artifactId>aopalliance</artifactId>
+	<version>1.0</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjrt</artifactId>
+    <version>1.6.11</version>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.6.11</version>
+</dependency>
+<dependency>
+	<groupId>org.glassfish.hk2.external</groupId>
+	<artifactId>cglib</artifactId>
+	<version>2.1.3</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-1.2-api</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+  <groupId>org.apache.logging.log4j</groupId>
+  <artifactId>log4j-api</artifactId>
+  <version>2.4.1</version>
+</dependency>
+ <dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-core</artifactId>
+    <version>2.4.1</version>
+ </dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-flume-ng</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-iostreams</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-jul</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-slf4j-impl</artifactId>
+	<version>2.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-taglib</artifactId>
+	<version>2.4.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.logging.log4j</groupId>
+	<artifactId>log4j-web</artifactId>
+	<version>2.1</version>
+</dependency>
+	
 	</dependencies>
 		
 	<profiles>
