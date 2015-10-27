@@ -2,15 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util-3.2.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
-
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 	<!-- Scan for spring annotated components -->
 	<!-- <context:component-scan base-package="org.akc.user"/> -->
+	<!-- logging -->
+	 <bean id="myAspect" class="com.akc.logging.AspectModule" lazy-init="false"/>
 	<context:component-scan base-package="org.akc" />
 
 	<!-- Process annotations on registered beans like @Autowired... -->
@@ -109,8 +112,28 @@
 		  <entry key="OC" value="outside covered"/>
     </map>
 </property>
-
-
 	</bean>
+<aop:config>
+   <aop:aspect id="aoploggingid" ref="myAspect">
+      <aop:pointcut id="businessService"
+         expression="execution(* com.akc..*(..))"/>
 
+      <!-- a before advice definition -->
+      <aop:before pointcut-ref="businessService" 
+         method="beforeAdvice"/>
+
+      <!-- an after advice definition -->
+      <aop:after pointcut-ref="businessService" 
+         method="afterAdvice"/>
+
+      
+
+      <!-- an after-throwing advice definition -->
+      <!--The doRequiredTask method must have parameter named ex -->
+      <aop:after-throwing pointcut-ref="businessService"
+         throwing="ex"
+         method="AfterThrowingAdvice"/>
+
+     </aop:aspect>
+</aop:config>
 </beans>
